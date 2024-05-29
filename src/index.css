@@ -6,30 +6,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.App{
-  display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 30px;
-    flex-direction: column;
-}
-.formStyle{
-  padding: 20px;
-  border: 1px solid black;
-  width: 25%;
-  text-align: center;
-}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-.pdf-div{
-  padding: 50px;
-  background-color:bisque;
-  margin-top: 50px;
-}
-canvas.react-pdf__Page__canvas{
-  margin-bottom: 50px;
 }
