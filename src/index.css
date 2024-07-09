@@ -1,13 +1,37 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* index.css */
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Estilos para el Header */
+.header {
+  background-color: #F26522; /* Color naranja del header */
+  color: white;
+  padding: 15px 20px; /* Ajusta el padding según tus necesidades */
+  display: flex;
+  justify-content: space-between; /* Distribuye los elementos horizontalmente */
+  align-items: center;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.profile-container {
+  display: flex;
+  align-items: center;
+}
+
+.profile-text {
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.profile-icon {
+  height: 24px; /* Ajusta el tamaño del icono según tus necesidades */
+  vertical-align: middle;
 }

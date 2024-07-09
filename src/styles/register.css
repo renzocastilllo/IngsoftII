@@ -1,0 +1,124 @@
+/* register.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: white; /* Fondo blanco */
+  }
+  .register-container .register-title {
+    color: #F26522; /* Naranja */
+    font-size: 50px; /* Tamaño de letra más grande */
+  }
+
+  .register-container {
+    width: 90%; /* Ocupa el 80% del ancho disponible */
+    margin: 50px auto;
+    padding: 40px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex; /* Usamos Flexbox para distribuir */
+    align-items: center;
+  }
+.form-wrapper {
+    width: 50%; /* Alinea el formulario al inicio (izquierda) */
+  }
+  .image-container img {
+    width: 100%; 
+    height: auto;
+    border-radius: 8px;
+    display: block;
+  }
+  
+  .register-title {
+    font-size: 24px;
+    margin-bottom: 40px;
+    color: #333;
+  }
+  
+  .input-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px; /* Espacio entre filas */
+  }
+  
+  .input-row > div {
+    width: 48%; /* Dos columnas de igual ancho */
+  }
+  
+  .input-row > div:first-child {
+    margin-right: 2%; /* Espacio entre campos en la misma fila */
+  }
+  .register-container form {
+    width: 800px; /* Ancho aumentado */
+  }
+  
+  
+  .form-group input[type="text"],
+  .form-group input[type="email"],
+  .form-group input[type="password"] {
+    width: 100%;
+    padding: 15px; /* Padding aumentado */
+    border: none;
+    border-bottom: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 16px; /* Tamaño de fuente aumentado */
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .register-button {
+    background-color: #F26522; /* Naranja */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 40px; /* Margen superior más grande */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  .image-container img:first-child {
+    margin-top: 50px; /* Margen superior para la primera imagen */
+  }
+  
+  .image-container img:last-child {
+    margin-bottom: 50px; /* Margen inferior para la última imagen */
+  }
+  .image-top-left {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 80px; /* Ajusta el tamaño según tus necesidades */
+    height: auto;
+  }
+  
+  .image-top-right {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 120px; /* Ajusta el tamaño según tus necesidades */
+    height: auto;
+  }
+  .image-left {
+    justify-self: flex-start; /* Position left image */
+    margin-bottom: 250px; /* Ajusta el valor para mover la imagen hacia arriba */
+    padding-left: 20px;
+
+  }
+  
+  .image-right {
+    justify-self: flex-end; /* Position right image */
+    margin-top: 300px;
+    padding-left: 100px;
+  }
+  
+  

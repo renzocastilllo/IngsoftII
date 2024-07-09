@@ -1,46 +1,29 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-function FilterSection({ selectedFilters, onFilterChange }) {
-  const areas = ["IoT", "Software", "Cloud Computing", "Inteligencia Artificial"];
-  const periods = ["2023-2", "2023-1", "2022-2"];
-
+function FilterSection({ title, filters, selectedFilters, handleFilterChange, className }) {
   return (
-    <div className="filter-section">
-      <h3 className="filter-title">Filtros</h3>
-      <div className="filter-group"> 
-        <h4 className="filter-subtitle">Área</h4>
-        {areas.map(area => (
-          <label key={area}>
-            <div className="checkbox-container">
-              <input 
-                type="checkbox" 
-                value={area} 
-                checked={selectedFilters.area.includes(area)}
-                onChange={() => onFilterChange('area', area)} 
-              />
-              {area}
-            </div>
-          </label>
-        ))}
-      </div>
-      <div className="filter-group">
-        <h4 className="filter-subtitle">Período</h4>
-        {periods.map(period => (
-          <label key={period}>
-            <div className="checkbox-container">
-              <input 
-                type="checkbox" 
-                value={period} 
-                checked={selectedFilters.period.includes(period)}
-                onChange={() => onFilterChange('period', period)} 
-              />
-              {period}
-            </div>
-          </label>
-        ))}
-      </div>
+    <div className={className}>
+      <h3>{title}</h3>
+      {filters.map(filter => (
+        <div
+          key={filter}
+          className={`${className} ${selectedFilters.includes(filter) ? 'active' : ''}`}
+          onClick={() => handleFilterChange(filter)}
+        >
+          {filter}
+        </div>
+      ))}
     </div>
   );
 }
+
+FilterSection.propTypes = {
+  title: PropTypes.string.isRequired,
+  filters: PropTypes.arrayOf(PropTypes.string).isRequired,
+  selectedFilters: PropTypes.arrayOf(PropTypes.string).isRequired,
+  handleFilterChange: PropTypes.func.isRequired,
+  className: PropTypes.string.isRequired,
+};
 
 export default FilterSection;

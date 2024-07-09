@@ -1,45 +1,44 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import documentIcon from '../document-icon.png';  
+import React from 'react';
+import resultadosStyles from '../styles/Resultados.module.css';
+import documentIcon from '../images/document-icon.png';
+import likeIcon from '../images/like-icon.png';
+import unlikeIcon from '../images/like-icon.png';
 
-function ResultItem({ title, author, rating, area, period, content, isProfessorPage, onDelete }) {
-  const [currentRating, setCurrentRating] = useState(rating);
-  const location = useLocation(); 
-
-  const isHomePage = location.pathname === '/';  
-  const isUserPage = location.pathname === '/usuario';
-
-  const handleStarClick = (newRating) => {
-    if (isHomePage) { 
-      setCurrentRating(newRating);
-    }
-  };
-
+function ResultItem({ inv, isLiked, likeCount, handleLikeClick }) {
   return (
-    <div className="result-item">
-      <img src={documentIcon} alt="Document icon" />
-      <div>
-        <h3>{title}</h3>
-        <p className="author">{author}</p>
-        <p className="content">{content}</p>
-        <div className="rating-and-save">
-          {isHomePage && ( 
-            <div className="rating">
-              {[...Array(5)].map((star, index) => (
-                <span
-                  key={index}
-                  className={index < currentRating ? 'star checked' : 'star'}
-                  onClick={() => handleStarClick(index + 1)}
-                >
-                  ★
-                </span>
-              ))}
-            </div>
-          )}
-          <button className="save-button" onClick={onDelete}>
-            {isProfessorPage ? 'Detalles' : (isUserPage ? 'Eliminar' : 'Guardar investigación')}
-          </button>
+    <div className={resultadosStyles['result-item']}>
+      {/* Sección de la imagen del documento */}
+      <div className={resultadosStyles['image-container']}>
+        <img src={documentIcon} alt="Icono de documento" className={resultadosStyles.image} />
+      </div>
+
+      {/* Sección de contenido de la investigación */}
+      <div className={resultadosStyles['content-container']}>
+        <h3>{inv.title}</h3>
+        <p>Autor: {inv.author}</p>
+        <p>Área: {inv.area}</p>
+        <p>Curso: {inv.curso}</p>
+        {/* ... (Puedes agregar más detalles de la investigación aquí) ... */}
+      </div>
+
+      {/* Sección de acciones (like y guardar) */}
+      <div className={resultadosStyles['action-container']}>
+        {/* Botón de like */}
+        <div className={resultadosStyles.like}>
+          <img
+            src={isLiked ? likeIcon : unlikeIcon}
+            alt="Like"
+            className={resultadosStyles.likeIcon}
+            onClick={handleLikeClick}
+            style={{ width: '18px', height: '18px' }}
+          />
+          <span className={resultadosStyles.likeCount}>{likeCount}</span> {/* Contador de likes con clase */}
         </div>
+
+        {/* Botón para guardar la investigación */}
+        <button className={resultadosStyles['save-button']} onClick={() => {/* Lógica para guardar */}}>
+          Guardar investigación
+        </button>
       </div>
     </div>
   );

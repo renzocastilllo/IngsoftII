@@ -1,39 +1,32 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import profileIcon from '../perfil.png';
+import profileIcon from '../images/perfil.png'; // Corregir la ruta de la imagen
+import '../index.css'; // Corregir la ruta del CSS
 
 function Header() {
   const location = useLocation();
 
+  // Determina la ruta de perfil según la ubicación actual
+  let perfilPath = '';
+  if (location.pathname === '/busquedaprofesor') {
+    perfilPath = '/perfilprofesor';
+  } else if (location.pathname === '/busquedaalumno') {
+    perfilPath = '/perfilalumno';
+  } else {
+    perfilPath = '/';
+  }
+
   return (
     <header className="header">
-      {location.pathname !== '/' && ( 
-        <Link to="/" className="home-link">Home Page</Link>
-      )}
-
       <h1>Lumen Investiga</h1>
-
-      <div className="profile-container">
-        {location.pathname === '/usuario' ? ( 
-          <>
-            <span className="profile-text">Hola, Juan</span>
-            <img src={profileIcon} alt="Profile icon" className="profile-icon" />
-          </>
-        ) : location.pathname === '/profesor' ? ( 
-            <>
-              <span className="profile-text">Hola, Profesor</span>
-              <img src={profileIcon} alt="Profile icon" className="profile-icon" />
-            </>
-          ) : ( // Renderizado para otras páginas
-          <>
-            <span className="profile-text">Perfil</span>
-            <img src={profileIcon} alt="Profile icon" className="profile-icon" />
-          </>
-        )}
-      </div>
+      {location.pathname !== '/' && (
+        <Link to={perfilPath} className="home-link profile-container">
+          <span className="profile-text">Perfil</span>
+          <img src={profileIcon} alt="Profile icon" className="profile-icon" />
+        </Link>
+      )}
     </header>
   );
 }
 
 export default Header;
-

@@ -1,0 +1,152 @@
+/* PerfilAlumno.module.css */
+
+/* Contenedor principal del perfil */
+.profileContent {  
+  width: 40%;
+  padding-right: 400px;
+  margin-left: 100px;
+}
+
+/* Título "Mi perfil" */
+.profileTitle {
+  color: #F26522;
+  font-size: 60px;
+}
+
+/* Contenedor del formulario */
+.perfilContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centrar los elementos horizontalmente */
+  margin-top: 50px; /* Espacio adicional en la parte superior */
+}
+
+/* Encabezado del perfil (pestañas) */
+.profileHeader {
+  background-color: #F8F8F8;
+  padding: 15px;
+  border-radius: 10px 10px 0 0;
+  text-align: center;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center; /* Centramos las pestañas */
+  gap: 25px; /* Espacio entre los botones */
+}
+
+.buttonContainer {
+  display: flex; /* Usamos Flexbox para distribuir los botones */
+  flex-direction: column; /* Apilamos los botones verticalmente */
+  gap: 10px; /* Espacio entre los botones */
+  width: 100%; /* Los botones ocupan todo el ancho */
+}
+
+.tabs button {
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  position: relative;
+  font-size: 17px; /* Ajusta el tamaño de la fuente según tus necesidades */
+  font-weight: normal; /* Peso de la fuente normal */
+}
+.tabs button:last-child { /* Eliminamos el margen del último botón */
+  margin-right: 0;
+}
+
+.tabs button.active-tab {
+  border-bottom: 2px solid #F26522; /* Subrayado naranja para la pestaña activa */
+}
+.activeTab {
+  color: orange;
+  font-weight: bold; /* Letras gruesas */
+  font-size: 18px; /* Letras más grandes */
+}
+.activeTab::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: orange;
+}
+/* Contenedor de los campos del formulario */
+.formGroup {
+  width: 100%;
+}
+
+/* Etiquetas de los campos */
+.formGroup label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+/* Campos de entrada de texto y email */
+.formGroup input[type="text"],
+.formGroup input[type="email"] {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+  background-color: #f8f8f8;
+}
+
+/* Estilo específico para el botón de modificar */
+.modificarButton {
+  background-color: #F26522;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+  margin-top: 20px; /* Espacio adicional arriba del botón */
+}
+
+/* Estilo específico para el botón de cambiar contraseña */
+.cambiarContrasenaButton {
+  background-color: #F26522;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+}
+
+/* Contenedor de la imagen */
+.imageSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centramos la imagen y el botón horizontalmente */
+  justify-content: center; /* Centrar verticalmente */
+  width: 100%;
+  margin-top: -500px; /* Subir la imagen */
+  margin-left: 850px;
+}
+
+.imageSection img {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px; /* Ajustamos el margen inferior */
+}
+
+/* Estilos específicos para el botón "Cambiar foto" */
+.cambiarFotoButton {
+  background-color: #F26522;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px; /* Ajustamos el margen superior */
+}

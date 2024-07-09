@@ -1,0 +1,8 @@
+.results-list {
+    width: calc(100% - 40px); /* Ajusta el ancho del ResultsList */
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    margin-left: 20px; /* Ajusta el margen izquierdo */
+  }
+  

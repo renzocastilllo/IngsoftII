@@ -1,0 +1,39 @@
+.filterSection {
+  background-color: #f8f8f8;
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  width: 90%;
+}
+
+.filter {
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #e0e0e0;
+  transition: background-color 0.3s ease;
+  margin-bottom: 10px; /* Add space between filters */
+  text-align: left;
+  width: 100%;
+}
+
+.filter:hover {
+  background-color: #d0d0d0;
+}
+
+.filter.active {
+  background-color: #F26522;
+  color: white;
+}
+
+.filterSection h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  background-color: #F26522;
+  color: white;
+  padding: 10px;
+  border-radius: 8px 8px 0 0;
+  width: 95%;
+  text-align: left;
+}

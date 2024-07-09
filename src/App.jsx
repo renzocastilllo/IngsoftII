@@ -1,75 +1,66 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
-import SearchBar from './components/SearchBar';
-import Navigation from './components/Navigation';
-import HomePage from './pages/HomePage';
-import UserPage from './pages/UserPage';
-import ProfessorPage from './pages/ProfessorPage';
-import investigaciones from './data';
-import './App.css';
+import Login from './pages/Login';
+import BusquedaAlumno from './pages/BusquedaAlumno';
+import BusquedaProfesor from './pages/BusquedaProfesor'; // Corregir la importación
+import Register from './pages/Register';
+import PerfilAlumno from './components/PerfilAlumno'; // Importa PerfilAlumno
+import PerfilProfesor from './components/PerfilProfesor'; // Importa PerfilProfesor
+import DetalleInvestigacion from './pages/DetalleInvestigacion';
+import Resultados from './pages/Resultados';
+import './styles/App.css';
+import investigaciones from './data/db.json';
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilters, setSelectedFilters] = useState({
     area: [],
-    period: []
+    curso: [],
   });
-
-  const [savedWorks, setSavedWorks] = useState([]);
 
   const handleFilterChange = (filterType, filterValue) => {
-    setSelectedFilters(prevFilters => {
-      const updatedFilters = { ...prevFilters };
-      if (filterType === 'area') {
-        updatedFilters.area = updatedFilters.area.includes(filterValue)
-          ? updatedFilters.area.filter(item => item !== filterValue)
-          : [...updatedFilters.area, filterValue];
-      } else if (filterType === 'period') {
-        updatedFilters.period = updatedFilters.period.includes(filterValue)
-          ? updatedFilters.period.filter(item => item !== filterValue)
-          : [...updatedFilters.period, filterValue];
-      }
-      return updatedFilters;
-    });
+    setSelectedFilters(prevFilters => ({
+      ...prevFilters,
+      [filterType]: prevFilters[filterType].includes(filterValue)
+        ? prevFilters[filterType].filter(item => item !== filterValue)
+        : [...prevFilters[filterType], filterValue]
+    }));
   };
-
-  const handleDeleteSavedWork = (workId) => {
-    setSavedWorks(prevSavedWorks => prevSavedWorks.filter(work => work.id !== workId));
-  };
-
-  const filteredInvestigaciones = investigaciones.filter(inv => {
-    const titleMatch = inv.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const areaMatch = selectedFilters.area.length === 0 || selectedFilters.area.includes(inv.area);
-    const periodMatch = selectedFilters.period.length === 0 || selectedFilters.period.includes(inv.period);
-    return titleMatch && areaMatch && periodMatch;
-  });
 
   return (
     <Router>
       <div className="app-container">
-        <Header />
-        <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
-        <Navigation />
         <Routes>
-          <Route path="/" element={<HomePage 
-              filteredInvestigaciones={filteredInvestigaciones} 
-              searchTerm={searchTerm} 
-              selectedFilters={selectedFilters} 
-              handleFilterChange={handleFilterChange} />} />
-          <Route path="/usuario" element={
-            <UserPage
-              savedWorks={savedWorks}
-              onDeleteSavedWork={handleDeleteSavedWork}
-              investigaciones={investigaciones}
-              selectedFilters={selectedFilters} 
-              handleFilterChange={handleFilterChange} 
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/perfilAlumno" element={<PerfilAlumno />} />
+          <Route path="/detalle/:id" element={<DetalleInvestigacion investigaciones={investigaciones.investigaciones} />} />
+          <Route path="/perfilProfesor" element={<PerfilProfesor />} /> {/* Usa PerfilProfesor en la ruta */}
+          <Route path="/busquedaAlumno" element={
+            <BusquedaAlumno
+              investigaciones={investigaciones.investigaciones} 
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              selectedFilters={selectedFilters}
+              handleFilterChange={handleFilterChange}
             />
           } />
-          <Route path="/profesor" element={
-            <ProfessorPage
-              investigaciones={investigaciones}
-              onDeleteSavedWork={handleDeleteSavedWork} 
+          <Route path="/busquedaProfesor" element={
+            <BusquedaProfesor
+              investigaciones={investigaciones.investigaciones} 
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              selectedFilters={selectedFilters}
+              handleFilterChange={handleFilterChange}
+            />
+          } />
+          <Route path="/resultados" element={
+            <Resultados 
+              investigaciones={investigaciones.investigaciones} 
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              selectedFilters={selectedFilters}
+              handleFilterChange={handleFilterChange}
             />
           } />
         </Routes>

@@ -1,0 +1,19 @@
+{
+  "investigaciones": [
+    {
+      "id": 1,
+      "title": "Investigación 1",
+      "abstract": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dignissim in eros vitae vehicula. Aliquam ut eros eget turpis iaculis faucibus tincidunt ac purus. Vestibulum gravida blandit suscipit. Etiam malesuada porta mattis. Fusce mattis libero dui, a gravida neque euismod a. Aliquam ullamcorper blandit risus, a pharetra purus elementum ullamcorper. Sed sollicitudin justo et nunc pharetra, eu rhoncus magna scelerisque. ",
+      "autor": "Autor 1",
+      "curso": "Curso 1",
+      "asesor": "Asesor 1",
+      "area": "Área 1",
+      "subarea": "Subárea 1",
+      "profesor": "Profesor 1",
+      "ods": ["ODS 1", "ODS 2"],
+      "periodo": "2023",
+      "keywords": ["keyword1", "keyword2"]
+    }
+  ]
+}
+
