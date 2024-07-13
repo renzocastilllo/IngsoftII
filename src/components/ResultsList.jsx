@@ -2,23 +2,26 @@ import React, { useState, useEffect } from 'react';
 import ResultItem from './ResultItem';
 import resultadosStyles from '../styles/Resultados.module.css';
 
-function ResultsList({ investigaciones }) {
+function ResultsList({ investigaciones, onSaveInvestigation }) {
   const [likes, setLikes] = useState({});
 
   useEffect(() => {
-    // Inicializar likes para cada investigación
     const initialLikes = {};
     investigaciones.forEach(inv => {
-      initialLikes[inv.id] = 0; // Inicializar likes en 0
+      initialLikes[inv.id] = 0;
     });
     setLikes(initialLikes);
-  }, [investigaciones]); // Dependencia del useEffect
+  }, [investigaciones]);
 
   const handleLikeClick = (id) => {
     setLikes(prevLikes => ({
       ...prevLikes,
       [id]: prevLikes[id] + 1,
     }));
+  };
+
+  const handleSaveClick = (investigation) => {
+    onSaveInvestigation(investigation);
   };
 
   return (
@@ -32,6 +35,7 @@ function ResultsList({ investigaciones }) {
             isLiked={likes[inv.id] > 0}
             likeCount={likes[inv.id]}
             handleLikeClick={() => handleLikeClick(inv.id)}
+            handleSaveClick={() => handleSaveClick(inv)}
           />
         ))
       ) : (
@@ -40,7 +44,5 @@ function ResultsList({ investigaciones }) {
     </div>
   );
 }
-
-
 
 export default ResultsList;

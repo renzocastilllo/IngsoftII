@@ -1,15 +1,36 @@
 import React, { useState } from 'react';
 import '../styles/login.css'; // Importa tu archivo CSS
 import logoicon from '../images/logo.png';  
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Aquí iría tu lógica de inicio de sesión
+    
+    try {
+      const response = await fetch('http://localhost:8080/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem('token', data.token); // Guardar el token JWT en localStorage
+        navigate('/resultados'); // Redirigir al usuario a la página principal u otra página protegida
+      } else {
+        const errorData = await response.text();
+        setError(errorData || 'Error al iniciar sesión');
+      }
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      setError('Error de conexión. Inténtalo de nuevo más tarde.');
+    }
   };
 
   return (
@@ -19,12 +40,12 @@ function Login() {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              placeholder="Correo" 
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              id="username"
+              name="username"
+              value={username}
+              placeholder="Código"
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div className="form-group">
@@ -39,6 +60,7 @@ function Login() {
           </div>
           <button type="submit">Ingresar</button>
         </form>
+        {error && <p className="error-message">{error}</p>}
         <Link to="/register">Regístrate aquí</Link>
       </div>
     </div>

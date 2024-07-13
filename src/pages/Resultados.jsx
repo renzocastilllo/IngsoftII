@@ -11,20 +11,35 @@ function Resultados() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilters, setSelectedFilters] = useState({ area: [], curso: [] });
   const [investigaciones, setInvestigaciones] = useState([]);
+  const [savedInvestigaciones, setSavedInvestigaciones] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('https://jsonplaceholder.typicode.com/posts?_limit=10')
-      .then(response => response.json())
-      .then(data => {
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/v1/articles', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        const data = await response.json();
         const investigacionesAdaptadas = data.map(item => ({
           id: item.id,
-          title: item.title,
-          area: 'Área ' + (item.id % 3 + 1),
-          curso: 'Curso ' + (item.id % 2 + 1)
+          title: item.articleDetailDTO.title,
+          area: item.articleDetailDTO.area,
+          curso: item.articleDetailDTO.subArea,
+          resume: item.articleDetailDTO.resume,
+          author: item.articleDetailDTO.author
         }));
         setInvestigaciones(investigacionesAdaptadas);
-      })
-      .catch(error => console.error('Error fetching data:', error));
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
+    fetchArticles();
   }, []);
 
   const handleFilterChange = (filterType, filterValue) => {
@@ -36,8 +51,33 @@ function Resultados() {
     }));
   };
 
+  const handleSaveInvestigation = async (investigation) => {
+    try {
+      const response = await fetch('http://localhost:8080/api/v1/saved-articles', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ articleId: investigation.id })
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al guardar la investigación');
+      }
+
+      const updatedSavedInvestigaciones = [...savedInvestigaciones, investigation];
+      setSavedInvestigaciones(updatedSavedInvestigaciones);
+      localStorage.setItem('savedInvestigaciones', JSON.stringify(updatedSavedInvestigaciones));
+      alert('Investigación guardada');
+    } catch (error) {
+      console.error('Error al guardar la investigación:', error);
+      alert('Error al guardar la investigación');
+    }
+  };
+
   const filteredInvestigaciones = investigaciones.filter(inv => {
-    const titleMatch = inv.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const titleMatch = inv.title ? inv.title.toLowerCase().includes(searchTerm.toLowerCase()) : false;
     const areaMatch = selectedFilters.area.length === 0 || selectedFilters.area.includes(inv.area);
     const cursoMatch = selectedFilters.curso.length === 0 || selectedFilters.curso.includes(inv.curso);
     return titleMatch && areaMatch && cursoMatch;
@@ -56,33 +96,37 @@ function Resultados() {
   });
 
   return (
-    <div>
+    <div className={resultadosStyles.container}>
       <Header />
       <div className={resultadosStyles.resultadosContainer}>
-        <div className="content">
-          <div className={resultadosStyles.searchAndResults}>
-            <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} className={searchBarStyles.searchBar} />
-            <ResultsList investigaciones={filteredInvestigaciones} className={resultadosStyles.resultsList} />
-          </div>
-          <div className="resultsAndFilters">
-            <div className="filters">
-              <h2>Filtros</h2>
-              <FilterSection
-                title="Área"
-                filters={Object.keys(filters.area)}
-                selectedFilters={selectedFilters.area}
-                handleFilterChange={(value) => handleFilterChange('area', value)}
-                className={filterStyles.filterSection}
-              />
-              <FilterSection
-                title="Curso"
-                filters={Object.keys(filters.curso)}
-                selectedFilters={selectedFilters.curso}
-                handleFilterChange={(value) => handleFilterChange('curso', value)}
-                className={filterStyles.filterSection}
-              />
-            </div>
-          </div>
+        <div className={resultadosStyles.searchAndResults}>
+          <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} className={searchBarStyles.searchBar} />
+          {error ? (
+            <p>Error fetching data: {error}</p>
+          ) : (
+            <ResultsList
+              investigaciones={filteredInvestigaciones}
+              onSaveInvestigation={handleSaveInvestigation}
+              className={resultadosStyles.resultsList}
+            />
+          )}
+        </div>
+        <div className={resultadosStyles.filters}>
+          <h2>Filtros</h2>
+          <FilterSection
+            title="Área"
+            filters={Object.keys(filters.area)}
+            selectedFilters={selectedFilters.area}
+            handleFilterChange={(value) => handleFilterChange('area', value)}
+            className={filterStyles.filterSection}
+          />
+          <FilterSection
+            title="Curso"
+            filters={Object.keys(filters.curso)}
+            selectedFilters={selectedFilters.curso}
+            handleFilterChange={(value) => handleFilterChange('curso', value)}
+            className={filterStyles.filterSection}
+          />
         </div>
       </div>
     </div>

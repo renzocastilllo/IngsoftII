@@ -1,14 +1,21 @@
 /* styles/Resultados.module.css */
 
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto; /* Permite el desplazamiento en la página completa */
+}
+
 .result-item {
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 20px;
-  margin-left: 50px;
-  align-items: center; /* Alineamos los elementos verticalmente al centro */
   margin-bottom: 20px;
   display: flex; /* Usar flexbox para alinear los elementos */
+  align-items: center; /* Alineamos los elementos verticalmente al centro */
 }
+
 .results-title {
   text-align: right; /* Alinea la palabra "Resultados" hacia la derecha */
   margin-right: 915px; /* Ajusta el margen derecho */
@@ -16,6 +23,7 @@
   font-size: 24px; /* Opcional: Ajusta el tamaño de la fuente si es necesario */
   font-weight: bold; /* Opcional: Haz que el texto sea negrita */
 }
+
 .image {
   width: 110px; /* Tamaño de la imagen */
   height: auto; /* Altura automática */
@@ -61,4 +69,28 @@
   cursor: pointer;
   font-weight: bold;
   margin-top: 10px; /* Agrega margen superior al botón */
+}
+
+.resultadosContainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.searchAndResults {
+  flex: 3;
+  min-width: 300px; /* Asegura que la barra de búsqueda no se encoge demasiado */
+}
+
+.filters {
+  flex: 1;
+  min-width: 300px; /* Ancho mínimo para los filtros */
+  margin-left: 20px; /* Espacio adicional a la izquierda de los filtros */
+}
+
+.resultsList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }

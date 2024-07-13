@@ -16,12 +16,23 @@
   align-items: center;
 }
 
-.header h1 {
+.title-link {
+  color: white;
+  text-decoration: none;
+}
+
+.title-link h1 {
   margin: 0;
   font-size: 24px;
 }
 
 .profile-container {
+  display: flex;
+  align-items: center;
+}
+
+.profile-item {
+  margin-right: 10px;
   display: flex;
   align-items: center;
 }
@@ -34,4 +45,17 @@
 .profile-icon {
   height: 24px; /* Ajusta el tamaño del icono según tus necesidades */
   vertical-align: middle;
+}
+
+.logout-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.logout-button:hover {
+  text-decoration: underline;
 }

@@ -8,10 +8,11 @@ import trabajosStyles from '../styles/TrabajosGuardados.module.css';
 
 function PerfilAlumno() {
   const [userData, setUserData] = useState({
-    nombres: '',
-    apellidos: '',
-    codigo: '',
-    correo: '',
+    id: '',
+    name: '',
+    lastName: '',
+    username: '',
+    emailAddress: '',
     fotoPerfil: null,
   });
 
@@ -19,30 +20,58 @@ function PerfilAlumno() {
   const [updatedData, setUpdatedData] = useState({ ...userData });
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('informacion');
-  const [trabajosGuardados] = useState([
-    {
-      id: 1,
-      title: 'Investigación 1',
-      description: 'Descripción de la investigación 1',
-      image: 'https://via.placeholder.com/100',
-      likes: 7, // Cambiado de rating a likes
-    },
-    {
-      id: 2,
-      title: 'Investigación 2',
-      description: 'Descripción de la investigación 2',
-      image: 'https://via.placeholder.com/100',
-      likes: 5, // Cambiado de rating a likes
-    },
-  ]);
+  const [trabajosGuardados, setTrabajosGuardados] = useState([]);
 
   useEffect(() => {
-    const storedUserData = JSON.parse(localStorage.getItem('userData'));
-    if (storedUserData) {
-      setUserData(storedUserData);
-      setUpdatedData(storedUserData);
-    }
-    setIsLoading(false);
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/api/v1/users/profile', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Error fetching user data');
+        }
+
+        const data = await response.json();
+
+        setUserData(data);
+        setUpdatedData(data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        setIsLoading(false);
+      }
+    };
+
+    const fetchSavedArticles = async () => {
+      try {
+        const userId = JSON.parse(localStorage.getItem('userData')).id;
+        const response = await fetch(`http://localhost:8080/api/v1/saved-articles?userId=${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Error fetching saved articles');
+        }
+
+        const data = await response.json();
+        setTrabajosGuardados(data);
+      } catch (error) {
+        console.error('Error fetching saved articles:', error);
+      }
+    };
+
+    fetchUserData();
+    fetchSavedArticles();
   }, []);
 
   const handleChange = (e) => {
@@ -61,11 +90,53 @@ function PerfilAlumno() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsEditing(false);
-    setUserData(updatedData);
-    localStorage.setItem('userData', JSON.stringify(updatedData));
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/v1/users/${userData.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error updating user data');
+      }
+
+      const data = await response.json();
+      setUserData(data);
+      setUpdatedData(data); // Asegúrate de actualizar también updatedData con la nueva información
+      localStorage.setItem('userData', JSON.stringify(data));
+    } catch (error) {
+      console.error('Error updating user data:', error);
+    }
+  };
+
+  const handleDeleteSavedArticle = async (articleId) => {
+    try {
+      const userId = JSON.parse(localStorage.getItem('userData')).id;
+      const response = await fetch(`http://localhost:8080/api/v1/saved-articles?userId=${userId}&articleId=${articleId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+
+      if (response.ok) {
+        alert('Investigación eliminada del perfil');
+        setTrabajosGuardados(prev => prev.filter(trabajo => trabajo.article.id !== articleId));
+      } else {
+        throw new Error('Error al eliminar la investigación');
+      }
+    } catch (error) {
+      console.error('Error al eliminar la investigación:', error);
+    }
   };
 
   if (isLoading) {
@@ -102,40 +173,43 @@ function PerfilAlumno() {
                     <FormInput
                       label="Nombres"
                       type="text"
-                      name="nombres"
-                      value={updatedData.nombres}
+                      name="name"
+                      value={updatedData.name}
                       onChange={handleChange}
                       disabled={!isEditing}
                     />
                     <FormInput
                       label="Apellidos"
                       type="text"
-                      name="apellidos"
-                      value={updatedData.apellidos}
+                      name="lastName"
+                      value={updatedData.lastName}
                       onChange={handleChange}
                       disabled={!isEditing}
                     />
                     <FormInput
                       label="Código"
                       type="text"
-                      name="codigo"
-                      value={updatedData.codigo}
+                      name="username"
+                      value={updatedData.username}
                       onChange={handleChange}
-                      disabled={!isEditing}
+                      disabled={true} // El código no debe ser editable
                     />
                     <FormInput
                       label="Correo"
                       type="email"
-                      name="correo"
-                      value={updatedData.correo}
+                      name="emailAddress"
+                      value={updatedData.emailAddress}
                       onChange={handleChange}
                       disabled={!isEditing}
                     />
                   </div>
                 </div>
                 <div className={styles.buttonContainer}>
-                  <button type="button" className={styles.modificarButton} onClick={() => setIsEditing(!isEditing)}>Modificar</button>
-                  <button type="button" className={styles.cambiarContrasenaButton}>Cambiar contraseña</button>
+                  {!isEditing ? (
+                    <button type="button" className={styles.modificarButton} onClick={() => setIsEditing(true)}>Modificar</button>
+                  ) : (
+                    <button type="submit" className={styles.cambiarContrasenaButton}>Guardar</button>
+                  )}
                 </div>
               </form>
               <div className={styles.imageSection}>
@@ -144,7 +218,7 @@ function PerfilAlumno() {
                   alt="Foto de perfil"
                   onError={(e) => e.target.src = ProfilePicture} // Fallback en caso de error
                 />
-                <label className={styles.cambiarFotoButton} htmlFor="fotoPerfil" style={{ marginLeft: '-10px' }}> {/* Modificación aquí */}
+                <label className={styles.cambiarFotoButton} htmlFor="fotoPerfil" style={{ marginLeft: '-10px' }}>
                   Cambiar foto
                   <input
                     type="file"
@@ -152,6 +226,7 @@ function PerfilAlumno() {
                     name="fotoPerfil"
                     onChange={handleImageChange}
                     style={{ display: 'none' }}
+                    disabled={!isEditing}
                   />
                 </label>
               </div>
@@ -159,15 +234,15 @@ function PerfilAlumno() {
           )}
           {activeTab === 'trabajos' && (
             trabajosGuardados.map(trabajo => (
-              <div key={trabajo.id} className={trabajosStyles.trabajoItem}>
-                <img src={trabajo.image} alt="Trabajo" className={trabajosStyles.trabajoImage} />
+              <div key={trabajo.article.id} className={trabajosStyles.trabajoItem}>
+                <img src="https://via.placeholder.com/100" alt="Trabajo" className={trabajosStyles.trabajoImage} />
                 <div className={trabajosStyles.trabajoInfo}>
-                  <h3 className={trabajosStyles.trabajoTitle}>{trabajo.title}</h3>
+                  <h3 className={trabajosStyles.trabajoTitle}>{trabajo.article.title}</h3>
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <p className={trabajosStyles.trabajoDescription}>{trabajo.description}</p>
-                    <div className={trabajosStyles.trabajoActions} style={{ marginLeft: '200px' }}> {/* Añadido aquí */}
+                    <p className={trabajosStyles.trabajoDescription}>{trabajo.article.resume}</p>
+                    <div className={trabajosStyles.trabajoActions} style={{ marginLeft: '200px' }}>
                       <Likes initialLikes={trabajo.likes} />
-                      <button className={trabajosStyles.removeButton}>Eliminar del perfil</button>
+                      <button className={trabajosStyles.removeButton} onClick={() => handleDeleteSavedArticle(trabajo.article.id)}>Eliminar del perfil</button>
                     </div>
                   </div>
                 </div>
