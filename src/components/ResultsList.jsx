@@ -44,5 +44,5 @@ function ResultsList({ investigaciones, onSaveInvestigation }) {
     </div>
   );
 }
-
+//pruebas
 export default ResultsList;
